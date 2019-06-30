@@ -9,6 +9,13 @@ struct program{
     int end;
     struct program *next;
 };
+struct programs{
+    int day;
+    char name[40];
+    int start;
+    int end;
+};
+
 void options(){
     printf("[1] new task\n");
     printf("[2] show tasks\n");
@@ -38,7 +45,13 @@ void add_end(struct program *list, struct program *new_program){
     current->next = new_program;
     new_program->next = NULL;
 }
-
+void delete_end(struct program * list){
+        struct program * current = list;
+        while(current->next->next != NULL)
+            current = current->next;
+            free(current->next);
+            current->next = NULL;
+    }
 void insert_task(struct program **plist, struct program *nt){
     struct program *current;
     struct program *previous;
@@ -137,17 +150,56 @@ void print_tasks(struct program *list){
     }
     printf("\n");
 }
+    void save_file(struct program *list,char name[30]){
+        FILE *fp;
+        strcat(name,".bin");
+        fp = fopen(name, "wb");
+        if(fp == NULL){
+            printf("Can not allocate!");
+            return;
+        }
+        struct programs temp;
+        struct program *current;
+        for(current = list; current != NULL; current = current->next){
+            temp.day = current->day;
+            strcpy(temp.name, current->name);
+            temp.start = current->start;
+            temp.end = current->end;
+            fwrite(&temp, sizeof(struct programs), 1, fp);
+        }
+        fclose(fp);
+    }
+
+    void load_file(struct program **list, char name[30]){
+        strcat(name,".bin");
+        FILE *fp;
+        fp = fopen(name, "rb");
+        if(fp == NULL){
+            printf("File not found!");
+            return;
+        }
+        struct programs temp;
+        struct program *current;
+        while(!feof(fp)){
+            fread(&temp, sizeof(struct programs), 1, fp);
+            printf("%s",temp.name);
+            current = create_program(temp.day, temp.name, temp.start, temp.end);
+            add_front(list, current);
+        }
+        fclose(fp);
+    }
 
 int main()
 {
     char name[30];
+    char copyname[30];
     int choice;
     struct program *list = NULL;
     printf("Enter your name: ");
     scanf("%s", name);
+    strcpy(copyname, name);
     printf("Welcome %s!\n", name);
     struct program *nt;
-    FILE *fp;
     while(1){
         options();
         scanf("%d", &choice);
@@ -163,10 +215,11 @@ int main()
                 print_tasks(list);
                 break;
             case 3:
-                continue;
+                save_file(list, copyname);
                 break;
             case 4:
-                continue;
+                load_file(&list, copyname);
+                delete_end(list);
                 break;
             case 5:
                 printf("Bye %s", name);
