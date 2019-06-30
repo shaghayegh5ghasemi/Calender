@@ -45,12 +45,10 @@ void add_end(struct program *list, struct program *new_program){
     current->next = new_program;
     new_program->next = NULL;
 }
-void delete_end(struct program * list){
-        struct program * current = list;
-        while(current->next->next != NULL)
-            current = current->next;
-            free(current->next);
-            current->next = NULL;
+void delete_front(struct program **list){
+        struct program *temp;
+        temp=*list;
+        *list = temp->next;
     }
 void insert_task(struct program **plist, struct program *nt){
     struct program *current;
@@ -219,7 +217,7 @@ int main()
                 break;
             case 4:
                 load_file(&list, copyname);
-                delete_end(list);
+                delete_front(&list);
                 break;
             case 5:
                 printf("Bye %s", name);
