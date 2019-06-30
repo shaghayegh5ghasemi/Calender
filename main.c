@@ -82,10 +82,19 @@ struct program* new_task(){
     scanf("%d", &st);
     printf("Enter the end time: ");
     scanf("%d", &ed);
-    //check kon esme va saate barname to ye rooz tekrari nabashe!
     struct program *nt;
     nt = create_program(dy, nm, st, ed);
     return nt;
+}
+int check_new_task(struct program *list, struct program *new_program){
+    struct program *current;
+    for(current = list; current != NULL; current = current->next){
+        if((current->day == new_program->day) && (strcmp(current->name, new_program->name) == 0))
+            return 1;
+        if((current->day == new_program->day) && (((new_program->start > current->start) && (new_program->start < current->end)) || ((new_program->end < current->end) && (new_program->end > current->start))))
+            return 2;
+    }
+    return 0;
 }
 void print_tasks(struct program *list){
     struct program *current;
@@ -153,7 +162,7 @@ void print_tasks(struct program *list){
         strcat(name,".bin");
         fp = fopen(name, "wb");
         if(fp == NULL){
-            printf("Can not allocate!");
+            printf("Can not open a file to save your data!");
             return;
         }
         struct programs temp;
@@ -180,7 +189,6 @@ void print_tasks(struct program *list){
         struct program *current;
         while(!feof(fp)){
             fread(&temp, sizeof(struct programs), 1, fp);
-            printf("%s",temp.name);
             current = create_program(temp.day, temp.name, temp.start, temp.end);
             add_front(list, current);
         }
@@ -206,8 +214,18 @@ int main()
                 nt = new_task();
                 if(nt == NULL)
                     printf("there is no space to add your task!");
-                else
-                    insert_task(&(list), nt);
+                else{
+                    if(check_new_task(list, nt) == 1){
+                        printf("conflict with name!\n");
+                    }
+                    if(check_new_task(list, nt) == 2){
+                        printf("conflict with time!\n");
+                    }
+                    if(check_new_task(list, nt) == 0){
+                        insert_task(&(list), nt);
+                        printf("There is no error and new task is created!\n");
+                    }
+                }
                 break;
             case 2:
                 print_tasks(list);
