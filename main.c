@@ -32,12 +32,13 @@ void add_front(struct program **plist, struct program *new_program){
     new_program->next = *plist;
     *plist = new_program;
 }
-/*void add_end(struct program *list, struct program new_program){
+void add_end(struct program *list, struct program new_program){
     struct program *current;
     for(current  = list;current->next != NULL; current = current->next);
     current->next = new_program;
     new_program->next = NULL;
-}*/
+}
+
 void insert_task(struct program **plist, struct program *nt){
     struct program *current;
     struct program *previous;
@@ -134,65 +135,7 @@ void print_tasks(struct program *list){
     }
     printf("\n");
 }
-void fprint_tasks(struct program *list, FILE *fp){
-    struct program *current;
-    fprintf(fp, "0 (Saturday): ");
-    for(current = list; current != NULL; current = current->name){
-        if(current->day == 0){
-            fprintf(fp, "%s (from: %d, to: %d)\n", current->name
-                   , current->start, current->end);
-        }
-    }
-    fprintf(fp, "\n");
-    fprintf(fp, "1 (Sunday): ");
-    for(current = list; current != NULL; current = current->name){
-        if(current->day == 1){
-            fprintf(fp, "%s (from: %d, to: %d)\n", current->name
-                   , current->start, current->end);
-        }
-    }
-    fprintf(fp, "\n");
-    fprintf(fp, "2 (Monday): ");
-    for(current = list; current != NULL; current = current->name){
-        if(current->day == 2){
-            fprintf(fp, "%s (from: %d, to: %d)\n", current->name
-                   , current->start, current->end);
-        }
-    }
-    fprintf(fp, "\n");
-    fprintf(fp, "3 (Tuesday): ");
-    for(current = list; current != NULL; current = current->name){
-        if(current->day == 3){
-            fprintf(fp, "%s (from: %d, to: %d)\n", current->name
-                   , current->start, current->end);
-        }
-    }
-    fprintf(fp, "\n");
-    fprintf(fp, "4 (Wednesday): ");
-    for(current = list; current != NULL; current = current->name){
-        if(current->day == 4){
-            fprintf(fp, "%s (from: %d, to: %d)\n", current->name
-                   , current->start, current->end);
-        }
-    }
-    fprintf(fp, "\n");
-    fprintf(fp, "5 (Thursday): ");
-    for(current = list; current != NULL; current = current->name){
-        if(current->day == 5){
-            fprintf(fp, "%s (from: %d, to: %d)\n", current->name
-                   , current->start, current->end);
-        }
-    }
-    fprintf(fp, "\n");
-    fprintf(fp, "6 (Friday): ");
-    for(current = list; current != NULL; current = current->name){
-        if(current->day == 6){
-            fprintf(fp, "%s (from: %d, to: %d)\n", current->name
-                   , current->start, current->end);
-        }
-    }
-    fprintf(fp, "\n");
-}
+
 int main()
 {
     char name[30];
