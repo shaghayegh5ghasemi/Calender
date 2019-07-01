@@ -159,7 +159,6 @@ void print_tasks(struct program *list){
 }
     void save_file(struct program *list,char name[30]){
         FILE *fp;
-        strcat(name,".bin");
         fp = fopen(name, "wb");
         if(fp == NULL){
             printf("Can not open a file to save your data!");
@@ -178,7 +177,6 @@ void print_tasks(struct program *list){
     }
 
     void load_file(struct program **list, char name[30]){
-        strcat(name,".bin");
         FILE *fp;
         fp = fopen(name, "rb");
         if(fp == NULL){
@@ -234,6 +232,9 @@ int main()
                 save_file(list, copyname);
                 break;
             case 4:
+                if(list!= NULL){
+                    list = NULL;
+                }
                 load_file(&list, copyname);
                 delete_front(&list);
                 break;
@@ -247,5 +248,4 @@ int main()
 
 
 
-/*
-bara save kardan bayad code ro to file zakhire konam ke bad az etmame arname va vorode dobare age load ro zad bara chap kardan kar ha ya wzafe kardane kare jadid be moshkel nakhorim! */
+
